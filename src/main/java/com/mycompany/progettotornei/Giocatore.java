@@ -60,7 +60,7 @@ public class Giocatore
         return punteggio;
     }
 
-    public void setPunteggio(int punti) 
+    public void incrementaPunteggio(int punti) 
     {
         this.punteggio += punti;
     }
@@ -74,11 +74,4 @@ public class Giocatore
     public String toString() {
         return "Giocatore{" + "id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", punteggio=" + punteggio + ", dataRegistrazione=" + dataRegistrazione + '}';
     }
-
-    
-
-    
-
-    
-    
 }
