@@ -18,7 +18,7 @@ public class Giocatore
     private int punteggio;
     private LocalDate dataRegistrazione;
 
-    public Giocatore(long id, String nome, int punteggio, LocalDate dataRegistrazione) 
+    public Giocatore(long id, String nome, String cognome, int punteggio, LocalDate dataRegistrazione) 
     {
         this.id = id;
         this.nome = nome;
@@ -26,7 +26,13 @@ public class Giocatore
         this.punteggio = punteggio;
         this.dataRegistrazione = dataRegistrazione;
     }
-
+    
+    public Giocatore(String nome, String cognome)
+    {
+        this.nome = nome;
+        this.cognome = cognome;
+    }
+            
     
     public long getId() 
     {

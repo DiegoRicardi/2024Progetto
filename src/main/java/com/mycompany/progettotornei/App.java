@@ -4,6 +4,9 @@
 
 package com.mycompany.progettotornei;
 
+import static java.lang.System.out;
+import java.util.Scanner;
+
 public class App {
 
     public static void main(String[] args) {
@@ -37,16 +40,19 @@ public class App {
                     System.out.println(torneo.toString());
                     break;
                 case 2:
-                    System.out.println("Inserisci il nome del giocatore:");
+                    System.out.println("Inserisci il nome del giocatore: ");
                     String nomeGiocatore = tastiera.nextLine();
-                    torneo.aggiungiGiocatore(new Giocatore(nomeGiocatore));
+                    System.out.println("Inserisci il cognome del giocatore: ");
+                    String cognomeGiocatore = tastiera.nextLine();
+                    torneo.aggiungiGiocatore(new Giocatore(nomeGiocatore, cognomeGiocatore));
                     System.out.println("Giocatore aggiunto correttamente.");
                     break;
                 case 3:
-                    System.out.println("Inserisci il nome del giocatore da rimuovere:");
+                    System.out.println("Inserisci il nome del giocatore da rimuovere: ");
                     String nomeGiocatoreRim = tastiera.nextLine();
-                    Giocatore giocatoreRim = new Giocatore(nomeGiocatoreRim); // Questa riga crea un nuovo giocatore, ma non è necessaria per la rimozione
-                    torneo.rimuoviGiocatore(giocatoreRim);
+                    System.out.println("Inserisci il cognome del giocatore da rimuovere: ");
+                    String cognomeGiocatoreRim = tastiera.nextLine();
+                    torneo.rimuoviGiocatore(new Giocatore(nomeGiocatoreRim, cognomeGiocatoreRim));
                     System.out.println("Giocatore rimosso correttamente.");
                     break;
                 case 4:
@@ -56,7 +62,7 @@ public class App {
                     torneo.giocaPartita();
                     break;
                 case 6:
-                    torneo.visualizzaClassifica();
+                    //torneo.visualizzaClassifica();
                     break;
             }
         } while (voceScelta != 0);
