@@ -15,7 +15,7 @@ public class App {
         vociMenu = new String[numeroVoci];
         Menu menu;
         int voceScelta;
-        GestioneTorneo torneo = new GestioneTorneo();
+        GestioneTornei torneo = new GestioneTornei();
         Scanner tastiera = new Scanner(System.in);
 
         vociMenu[0] = "0\t--> Esci";

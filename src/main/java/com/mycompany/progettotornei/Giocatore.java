@@ -77,7 +77,8 @@ public class Giocatore
     }
 
     @Override
-    public String toString() {
+    public String toString() 
+    {
         return "Giocatore{" + "id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", punteggio=" + punteggio + ", dataRegistrazione=" + dataRegistrazione + '}';
     }
 }

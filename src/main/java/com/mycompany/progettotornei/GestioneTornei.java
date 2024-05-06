@@ -9,20 +9,21 @@ import static java.lang.StrictMath.random;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
  * @author Studente
  */
-public class gestioneTorneo 
+public class GestioneTornei
 {
     
     private static final int NUM_MAX_PARTECIPANTI = 100;
     private Giocatore[] partecipanti;
     private int maxGiocatori;
-    private Random random;
+    private Random random = new Random();
     
-    public gestioneTorneo()
+    public GestioneTornei()
     {
         partecipanti = new Giocatore[NUM_MAX_PARTECIPANTI];
         maxGiocatori = 0;
@@ -87,7 +88,10 @@ public class gestioneTorneo
         Giocatore giocatore2 = partecipanti[1];
  
         // Esempio di determinazione del vincitore in modo casuale
-        int esitoPartita = random.nextInt(3); // 0 = pareggio, 1 = vince giocatore1, 2 = vince giocatore 2
+        Scanner s1 = new Scanner(System.in);
+        System.out.println("0 = pareggio, 1 = vince giocatore1, 2 = vince giocatore 2");
+        System.out.println(giocatore1.getNome()+" "+giocatore1.getCognome()+" VS "+giocatore2.getNome()+" "+giocatore2.getCognome());
+        int esitoPartita = s1.nextInt(); // 0 = pareggio, 1 = vince giocatore1, 2 = vince giocatore 2
  
         if (esitoPartita == 0) //pareggio
         { 
@@ -115,5 +119,13 @@ public class gestioneTorneo
             partecipanti[--maxGiocatori] = null;
         }
     }
+
+    @Override
+    public String toString() 
+    {
+        return "GestioneTorneo{" + "partecipanti=" + partecipanti.toString() + ", maxGiocatori=" + maxGiocatori + '}';
+    }
+    
     
 }
+
