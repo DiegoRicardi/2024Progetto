@@ -12,11 +12,12 @@ import java.time.LocalDate;
  */
 public class Giocatore 
 {
-    private long id;
+    private long id=1;
     private String nome;
     private String cognome;
     private int punteggio;
     private LocalDate dataRegistrazione;
+
 
     public Giocatore(long id, String nome, String cognome, int punteggio, LocalDate dataRegistrazione) 
     {
@@ -31,15 +32,13 @@ public class Giocatore
     {
         this.nome = nome;
         this.cognome = cognome;
-    }
-            
+    }        
     
     public long getId() 
     {
         return id;
     }
-
-
+    
     public String getNome() 
     {
         return nome;
@@ -77,8 +76,9 @@ public class Giocatore
     }
 
     @Override
-    public String toString() 
-    {
-        return "Giocatore{" + "id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", punteggio=" + punteggio + ", dataRegistrazione=" + dataRegistrazione + '}';
+    public String toString() {
+        return "Giocatore{" + "id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", dataRegistrazione=" + dataRegistrazione + '}';
     }
+
+    
 }

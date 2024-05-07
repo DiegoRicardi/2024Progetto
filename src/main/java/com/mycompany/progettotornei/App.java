@@ -62,9 +62,11 @@ public class App {
                     torneo.giocaPartita();
                     break;
                 case 6:
-                    //torneo.visualizzaClassifica();
+                    torneo.visualizzaClassifica();
                     break;
             }
         } while (voceScelta != 0);
     }
+    
+    
 }

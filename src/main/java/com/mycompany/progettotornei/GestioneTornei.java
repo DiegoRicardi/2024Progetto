@@ -18,10 +18,9 @@ import java.util.Scanner;
 public class GestioneTornei
 {
     
-    private static final int NUM_MAX_PARTECIPANTI = 100;
+    private static final int NUM_MAX_PARTECIPANTI = 16;
     private Giocatore[] partecipanti;
     private int maxGiocatori;
-    private Random random = new Random();
     
     public GestioneTornei()
     {
@@ -77,7 +76,8 @@ public class GestioneTornei
         }
     }
     
-    public void giocaPartita() {
+    public void giocaPartita() 
+    {
         // Implementa la logica per giocare una partita
         if (maxGiocatori < 2) {
             System.out.println("Non ci sono abbastanza giocatori per giocare una partita.");
@@ -111,21 +111,40 @@ public class GestioneTornei
         System.out.println(giocatore1.getNome() + " vs " + giocatore2.getNome());
         System.out.println("Esito: " + (esitoPartita == 0 ? "Pareggio" : esitoPartita == 1 ? giocatore1.getNome() + " vince" : giocatore2.getNome() + " vince"));
  
-        // Rimuove i giocatori dalla lista
-        for (int i = 0; i < 2; i++) {
-            for (int j = i; j < maxGiocatori - 1; j++) {
-                partecipanti[j] = partecipanti[j + 1];
-            }
-            partecipanti[--maxGiocatori] = null;
+        // Se il numero di giocatori è dispari, un giocatore vince a tavolino
+        if (maxGiocatori % 2 != 0) 
+        {
+            Giocatore vincitoreTavolino = partecipanti[maxGiocatori - 1];
+            vincitoreTavolino.incrementaPunteggio(3);
+            System.out.println(vincitoreTavolino.getNome() + " " + vincitoreTavolino.getCognome() + " vince a tavolino.");
         }
     }
-
-    @Override
-    public String toString() 
+    
+    public void visualizzaClassifica() 
     {
-        return "GestioneTorneo{" + "partecipanti=" + partecipanti.toString() + ", maxGiocatori=" + maxGiocatori + '}';
+        System.out.println("Classifica dei partecipanti:");
+        for (int i = 0; i < maxGiocatori; i++) 
+        {
+            if (partecipanti[i]!= null) 
+            {
+            System.out.println((i + 1) + ". " + partecipanti[i].getNome() + partecipanti[i].getCognome() + " - Punteggio: " + partecipanti[i].getPunteggio());
+            }
+        }
     }
     
-    
+    @Override
+    public  String toString()
+    {
+        String s="";
+        for(int i=0;i<NUM_MAX_PARTECIPANTI;i++)
+        {
+            s=s+i+"\t--> ";
+            if (partecipanti[i]!=null)
+                s=s+partecipanti[i].toString()+"\n";
+            else
+                s=s+"\n";
+        }
+        return s;
+    }
 }
 
