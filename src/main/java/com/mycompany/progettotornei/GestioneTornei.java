@@ -4,147 +4,155 @@
  */
 package com.mycompany.progettotornei;
 
-import static java.lang.Math.random;
-import static java.lang.StrictMath.random;
+import Eccezioni.NessunGiocatoreException;
+import Eccezioni.NessunIncontroException;
+import Eccezioni.PartecipantiDispariException;
+import Eccezioni.TorneoPienoException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Random;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
+
+
 
 /**
  *
- * @author Studente
+ * @author studente
  */
-public class GestioneTornei
-{
-    
+public class GestioneTornei {
+
     private static final int NUM_MAX_PARTECIPANTI = 16;
-    private Giocatore[] partecipanti;
-    private int maxGiocatori;
-    
-    public GestioneTornei()
-    {
-        partecipanti = new Giocatore[NUM_MAX_PARTECIPANTI];
-        maxGiocatori = 0;
+    private List<Giocatore> partecipanti;
+    private List<String> incontri;
+    private Scanner scanner;
+
+    public GestioneTornei() {
+        partecipanti = new ArrayList<>();
+        incontri = new ArrayList<>();
+        scanner = new Scanner(System.in);
     }
-    
-    public void aggiungiGiocatore(Giocatore giocatore) 
-    {
-        if (maxGiocatori >= NUM_MAX_PARTECIPANTI) 
-        {
-            System.out.println("Numero massimo di giocatori raggiunto");
-            return;
+
+    public void aggiungiGiocatore(Giocatore giocatore) throws TorneoPienoException {
+        if (partecipanti.size() >= NUM_MAX_PARTECIPANTI) {
+            throw new TorneoPienoException();
         }
-        partecipanti[maxGiocatori++] = giocatore;
+        partecipanti.add(giocatore);
     }
-    
-    public void rimuoviGiocatore(Giocatore giocatore) 
-    {
-        for (int i = 0; i < maxGiocatori; i++) 
-        {
-            if (partecipanti[i].equals(giocatore)) 
-            {
-                for (int j = i; j < maxGiocatori - 1; j++) 
-                {
-                    partecipanti[j] = partecipanti[j + 1];
-                }
-                partecipanti[--maxGiocatori] = null;
-                return;
+
+    public void rimuoviGiocatore(Giocatore giocatore) throws NessunGiocatoreException {
+       boolean giocatoreTrovato = false;
+       for (Giocatore g : partecipanti) {
+           if (g.getNome().equals(giocatore.getNome()) && g.getCognome().equals(giocatore.getCognome())) {
+               partecipanti.remove(g);
+               giocatoreTrovato = true;
+               break; // Usciamo dal ciclo una volta trovato il giocatore
+           }
+       }
+       if (!giocatoreTrovato) {
+           throw new NessunGiocatoreException();
+       }
+    }
+
+    public void generaIncontri() throws PartecipantiDispariException {
+        if (partecipanti.size() % 2 != 0) {
+            throw new PartecipantiDispariException();
+        }
+
+        List<Giocatore> giocatoriEffettivi = new ArrayList<>();
+        for (Giocatore giocatore : partecipanti) {
+            if (giocatore != null) {
+                giocatoriEffettivi.add(giocatore);
             }
         }
-        System.out.println("Giocatore non trovato");
-    }
-    
-    public void generaIncontri() 
-    {
-        // Filtra solo i giocatori effettivi
-        ArrayList<Giocatore> giocatoriEffettivi = new ArrayList<>();
-        for (int i = 0; i < maxGiocatori; i++) 
-        {
-            if (partecipanti[i] != null) 
-            {
-                giocatoriEffettivi.add(partecipanti[i]);
-            }
-        }
-        
-        //Creazione degli incontri
-        for (int i = 0; i < giocatoriEffettivi.size() - 1; i += 2) 
-        {
+
+        Collections.shuffle(giocatoriEffettivi);
+
+        incontri.clear();
+        for (int i = 0; i < giocatoriEffettivi.size(); i += 2) {
             Giocatore giocatore1 = giocatoriEffettivi.get(i);
             Giocatore giocatore2 = giocatoriEffettivi.get(i + 1);
+            String incontro = giocatore1.getNome() + " vs " + giocatore2.getNome();
+            incontri.add(incontro);
+            System.out.println(incontro);
+        }
+    }
+
+    public void giocaPartita() throws NessunIncontroException {
+        if (incontri.isEmpty()) {
+            throw new NessunIncontroException();
+        }
+
+        for (int i = 0; i < incontri.size(); i++) {
+            String incontro = incontri.get(i);
+            String[] nomiGiocatori = incontro.split(" vs ");
+            Giocatore giocatore1 = trovaGiocatorePerNome(nomiGiocatori[0]);
+            Giocatore giocatore2 = trovaGiocatorePerNome(nomiGiocatori[1]);
+
+            System.out.println("0 = pareggio, 1 = vince " + giocatore1.getNome() + ", 2 = vince " + giocatore2.getNome());
+            System.out.println(giocatore1.getNome() + " " + giocatore1.getCognome() + " VS " + giocatore2.getNome() + " " + giocatore2.getCognome());
+            int esitoPartita = scanner.nextInt();
+
+            if (esitoPartita == 0) {
+                giocatore1.incrementaPunteggio(1);
+                giocatore2.incrementaPunteggio(1);
+            } else if (esitoPartita == 1) {
+                giocatore1.incrementaPunteggio(3);
+            } else {
+                giocatore2.incrementaPunteggio(3);
+            }
+
+            System.out.println("Partita giocata:");
             System.out.println(giocatore1.getNome() + " vs " + giocatore2.getNome());
+            System.out.println("Esito: " + (esitoPartita == 0 ? "Pareggio" : esitoPartita == 1 ? giocatore1.getNome() + " vince" : giocatore2.getNome() + " vince"));
         }
     }
-    
-    public void giocaPartita() 
-    {
-        // Implementa la logica per giocare una partita
-        if (maxGiocatori < 2) {
-            System.out.println("Non ci sono abbastanza giocatori per giocare una partita.");
-            return;
-        }
- 
-        Giocatore giocatore1 = partecipanti[0];
-        Giocatore giocatore2 = partecipanti[1];
- 
-        // Esempio di determinazione del vincitore in modo casuale
-        Scanner s1 = new Scanner(System.in);
-        System.out.println("0 = pareggio, 1 = vince giocatore1, 2 = vince giocatore 2");
-        System.out.println(giocatore1.getNome()+" "+giocatore1.getCognome()+" VS "+giocatore2.getNome()+" "+giocatore2.getCognome());
-        int esitoPartita = s1.nextInt(); // 0 = pareggio, 1 = vince giocatore1, 2 = vince giocatore 2
- 
-        if (esitoPartita == 0) //pareggio
-        { 
-            giocatore1.incrementaPunteggio(1);
-            giocatore2.incrementaPunteggio(1);
-        } 
-        else if (esitoPartita == 1) //vincitore giocatore 1
-        { 
-            giocatore1.incrementaPunteggio(3);
-        } 
-        else //vincitore giocatore 2
-        { 
-            giocatore2.incrementaPunteggio(3);
-        }
- 
-        System.out.println("Partita giocata:");
-        System.out.println(giocatore1.getNome() + " vs " + giocatore2.getNome());
-        System.out.println("Esito: " + (esitoPartita == 0 ? "Pareggio" : esitoPartita == 1 ? giocatore1.getNome() + " vince" : giocatore2.getNome() + " vince"));
- 
-        // Se il numero di giocatori è dispari, un giocatore vince a tavolino
-        if (maxGiocatori % 2 != 0) 
-        {
-            Giocatore vincitoreTavolino = partecipanti[maxGiocatori - 1];
-            vincitoreTavolino.incrementaPunteggio(3);
-            System.out.println(vincitoreTavolino.getNome() + " " + vincitoreTavolino.getCognome() + " vince a tavolino.");
-        }
-    }
-    
-    public void visualizzaClassifica() 
-    {
+
+    public void visualizzaClassifica() {
         System.out.println("Classifica dei partecipanti:");
-        for (int i = 0; i < maxGiocatori; i++) 
-        {
-            if (partecipanti[i]!= null) 
-            {
-            System.out.println((i + 1) + ". " + partecipanti[i].getNome() + partecipanti[i].getCognome() + " - Punteggio: " + partecipanti[i].getPunteggio());
+        int posizione = 1;
+        for (Giocatore giocatore : partecipanti) {
+            if (giocatore != null) {
+                System.out.println(posizione++ + ". " + giocatore.getNome() + " " + giocatore.getCognome() + " - Punteggio: " + giocatore.getPunteggio());
             }
         }
     }
-    
-    @Override
-    public  String toString()
-    {
-        String s="";
-        for(int i=0;i<NUM_MAX_PARTECIPANTI;i++)
-        {
-            s=s+i+"\t--> ";
-            if (partecipanti[i]!=null)
-                s=s+partecipanti[i].toString()+"\n";
-            else
-                s=s+"\n";
+
+    public void modificaNomeGiocatore(String nomeVecchio, String cognome, String nuovoNome) throws NessunGiocatoreException {
+        boolean trovato = false;
+        for (Giocatore giocatore : partecipanti) {
+            if (giocatore.getNome().equals(nomeVecchio) && giocatore.getCognome().equals(cognome)) {
+                giocatore.setNome(nuovoNome);
+                trovato = true;
+                break;
+            }
         }
-        return s;
+        if (!trovato) {
+            throw new NessunGiocatoreException();
     }
 }
 
+    // Metodo per trovare un giocatore per nome
+    private Giocatore trovaGiocatorePerNome(String nome) {
+        for (Giocatore giocatore : partecipanti) {
+            if (giocatore.getNome().equals(nome)) {
+                return giocatore;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < NUM_MAX_PARTECIPANTI; i++) {
+            s.append(i).append("\t--> ");
+            if (i < partecipanti.size() && partecipanti.get(i) != null) {
+                s.append(partecipanti.get(i)).append("\n");
+            } else {
+                s.append("\n");
+            }
+        }
+        return s.toString();
+    }
+}

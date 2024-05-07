@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author gian
+ * @author studente
  */
 public class Menu 
 {
