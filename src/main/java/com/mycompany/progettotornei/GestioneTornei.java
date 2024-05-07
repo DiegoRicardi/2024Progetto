@@ -8,6 +8,16 @@ import Eccezioni.NessunGiocatoreException;
 import Eccezioni.NessunIncontroException;
 import Eccezioni.PartecipantiDispariException;
 import Eccezioni.TorneoPienoException;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -142,6 +152,43 @@ public class GestioneTornei {
         return null;
     }
 
+    // Metodo per esportare i dati dei giocatori in formato CSV
+    public void esportaCSV(String nomeFile) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(nomeFile))) {
+            for (Giocatore giocatore : partecipanti) {
+                writer.println(giocatore.getId() + "," +
+                        giocatore.getNome() + "," +
+                        giocatore.getCognome() + "," +
+                        giocatore.getPunteggio() + "," +
+                        giocatore.getDataRegistrazione());
+            }
+            System.out.println("Esportazione avvenuta con successo!");
+        } catch (IOException e) {
+            System.out.println("Errore durante l'esportazione dei dati: ");
+        }
+    }
+
+    // Metodo per importare i dati dei giocatori da un file CSV
+    public void importaCSV(String nomeFile) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomeFile))) {
+            String riga;
+            while ((riga = reader.readLine()) != null) {
+                String[] datiGiocatore = riga.split(",");
+                long id = Long.parseLong(datiGiocatore[0]);
+                String nome = datiGiocatore[1];
+                String cognome = datiGiocatore[2];
+                int punteggio = Integer.parseInt(datiGiocatore[3]);
+                LocalDate dataRegistrazione = LocalDate.parse(datiGiocatore[4]);
+
+                Giocatore giocatore = new Giocatore(id, nome, cognome, punteggio, dataRegistrazione);
+                partecipanti.add(giocatore);
+            }
+            System.out.println("Importazione avvenuta con successo.");
+        } catch (IOException e) {
+            System.out.println("Errore durante l'importazione dei dati: ");
+        }
+    }
+    
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();

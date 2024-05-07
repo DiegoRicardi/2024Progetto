@@ -8,6 +8,7 @@ import Eccezioni.NessunGiocatoreException;
 import Eccezioni.NessunIncontroException;
 import Eccezioni.PartecipantiDispariException;
 import Eccezioni.TorneoPienoException;
+import java.io.IOException;
 import static java.lang.System.out;
 import java.util.List;
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class App {
 
     public static void main(String[] args) {
         String[] vociMenu;
-        int numeroVoci = 8;
+        int numeroVoci = 12; // Aggiunto il numero di voci per i nuovi metodi
         vociMenu = new String[numeroVoci];
         Menu menu;
         int voceScelta;
@@ -37,6 +38,10 @@ public class App {
         vociMenu[5] = "5\t--> Gioca partita";
         vociMenu[6] = "6\t--> Visualizza classifica";
         vociMenu[7] = "7\t--> Modifica nome";
+        vociMenu[8] = "8\t--> Esporta dati dei giocatori in CSV";
+        vociMenu[9] = "9\t--> Importa dati dei giocatori da CSV";
+        vociMenu[10] = "10\t--> serializzazione";
+        vociMenu[11] = "11\t--> deserializzazione";
 
         menu = new Menu(vociMenu);
 
@@ -111,6 +116,16 @@ public class App {
                     } catch (NessunGiocatoreException ex) {
                         System.out.println("Giocatore non trovato.");
                     }
+                    break;   
+                case 8:
+                    System.out.println("Inserisci il nome del file CSV per esportare i dati: ");
+                    String nomeFileEsportazione = tastiera.nextLine();
+                    torneo.esportaCSV(nomeFileEsportazione);
+                    break;    
+                case 9:
+                    System.out.println("Inserisci il nome del file CSV da cui importare i dati: ");
+                    String nomeFileImportazione = tastiera.nextLine();
+                    torneo.importaCSV(nomeFileImportazione);
                     break;
             }
         } while (voceScelta != 0);
