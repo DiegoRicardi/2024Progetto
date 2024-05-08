@@ -23,7 +23,7 @@ public class App {
 
     public static void main(String[] args) {
         String[] vociMenu;
-        int numeroVoci = 12; // Aggiunto il numero di voci per i nuovi metodi
+        int numeroVoci = 10; // Aggiunto il numero di voci per i nuovi metodi
         vociMenu = new String[numeroVoci];
         Menu menu;
         int voceScelta;
@@ -40,8 +40,8 @@ public class App {
         vociMenu[7] = "7\t--> Modifica nome";
         vociMenu[8] = "8\t--> Esporta dati dei giocatori in CSV";
         vociMenu[9] = "9\t--> Importa dati dei giocatori da CSV";
-        vociMenu[10] = "10\t--> serializzazione";
-        vociMenu[11] = "11\t--> deserializzazione";
+        
+
 
         menu = new Menu(vociMenu);
 
@@ -127,6 +127,8 @@ public class App {
                     String nomeFileImportazione = tastiera.nextLine();
                     torneo.importaCSV(nomeFileImportazione);
                     break;
+                
+  
             }
         } while (voceScelta != 0);
     }

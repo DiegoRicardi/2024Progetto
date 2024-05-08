@@ -27,22 +27,31 @@ import java.util.Scanner;
 
 
 /**
- *
+ * classe che gestisce un torneo
  * @author studente
  */
 public class GestioneTornei {
 
-    private static final int NUM_MAX_PARTECIPANTI = 16;
-    private List<Giocatore> partecipanti;
-    private List<String> incontri;
-    private Scanner scanner;
+    private static final int NUM_MAX_PARTECIPANTI = 16; // Numero massimo di partecipanti
+    private List<Giocatore> partecipanti; // Lista dei partecipanti al torneo
+    private List<String> incontri; // Lista degli incontri
+    private Scanner scanner; // Scanner per l'input da tastiera
 
+    /**
+     * Costruttore della classe GestioneTornei.
+     * Inizializza le liste dei partecipanti e degli incontri, e il scanner per l'input da tastiera.
+     */
     public GestioneTornei() {
         partecipanti = new ArrayList<>();
         incontri = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
 
+    /**
+     * Aggiunge un giocatore al torneo.
+     * @param giocatore Il giocatore da aggiungere.
+     * @throws TorneoPienoException Se il numero massimo di partecipanti è stato raggiunto.
+     */
     public void aggiungiGiocatore(Giocatore giocatore) throws TorneoPienoException {
         if (partecipanti.size() >= NUM_MAX_PARTECIPANTI) {
             throw new TorneoPienoException();
@@ -50,6 +59,11 @@ public class GestioneTornei {
         partecipanti.add(giocatore);
     }
 
+    /**
+     * Rimuove un giocatore dal torneo.
+     * @param giocatore Il giocatore da rimuovere.
+     * @throws NessunGiocatoreException Se il giocatore specificato non è presente nel torneo.
+     */
     public void rimuoviGiocatore(Giocatore giocatore) throws NessunGiocatoreException {
        boolean giocatoreTrovato = false;
        for (Giocatore g : partecipanti) {
@@ -64,6 +78,10 @@ public class GestioneTornei {
        }
     }
 
+    /**
+     * Genera gli incontri tra i giocatori.
+     * @throws PartecipantiDispariException Se il numero di partecipanti è dispari.
+     */
     public void generaIncontri() throws PartecipantiDispariException {
         if (partecipanti.size() % 2 != 0) {
             throw new PartecipantiDispariException();
@@ -88,6 +106,10 @@ public class GestioneTornei {
         }
     }
 
+    /**
+     * Simula lo svolgimento di una partita tra i giocatori.
+     * @throws NessunIncontroException Se non ci sono incontri da giocare.
+     */
     public void giocaPartita() throws NessunIncontroException {
         if (incontri.isEmpty()) {
             throw new NessunIncontroException();
@@ -118,6 +140,9 @@ public class GestioneTornei {
         }
     }
 
+    /**
+     * Visualizza la classifica dei giocatori.
+     */
     public void visualizzaClassifica() {
         System.out.println("Classifica dei partecipanti:");
         int posizione = 1;
@@ -128,6 +153,13 @@ public class GestioneTornei {
         }
     }
 
+    /**
+     * Modifica il nome di un giocatore.
+     * @param nomeVecchio Il vecchio nome del giocatore.
+     * @param cognome Il cognome del giocatore.
+     * @param nuovoNome Il nuovo nome da assegnare al giocatore.
+     * @throws NessunGiocatoreException Se il giocatore specificato non è presente nel torneo.
+     */
     public void modificaNomeGiocatore(String nomeVecchio, String cognome, String nuovoNome) throws NessunGiocatoreException {
         boolean trovato = false;
         for (Giocatore giocatore : partecipanti) {
@@ -139,10 +171,14 @@ public class GestioneTornei {
         }
         if (!trovato) {
             throw new NessunGiocatoreException();
+        }
     }
-}
 
-    // Metodo per trovare un giocatore per nome
+    /**
+     * Trova un giocatore per nome.
+     * @param nome Il nome del giocatore da cercare.
+     * @return Il giocatore corrispondente al nome specificato, null se non trovato.
+     */
     private Giocatore trovaGiocatorePerNome(String nome) {
         for (Giocatore giocatore : partecipanti) {
             if (giocatore.getNome().equals(nome)) {
@@ -152,7 +188,10 @@ public class GestioneTornei {
         return null;
     }
 
-    // Metodo per esportare i dati dei giocatori in formato CSV
+    /**
+     * Esporta i dati dei giocatori in un file CSV.
+     * @param nomeFile Il nome del file CSV.
+     */
     public void esportaCSV(String nomeFile) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(nomeFile))) {
             for (Giocatore giocatore : partecipanti) {
@@ -164,11 +203,14 @@ public class GestioneTornei {
             }
             System.out.println("Esportazione avvenuta con successo!");
         } catch (IOException e) {
-            System.out.println("Errore durante l'esportazione dei dati: ");
+            System.out.println("Errore durante l'esportazione dei dati: " + e.getMessage());
         }
     }
 
-    // Metodo per importare i dati dei giocatori da un file CSV
+    /**
+     * Importa i dati dei giocatori da un file CSV.
+     * @param nomeFile Il nome del file CSV.
+     */
     public void importaCSV(String nomeFile) {
         try (BufferedReader reader = new BufferedReader(new FileReader(nomeFile))) {
             String riga;
@@ -185,10 +227,30 @@ public class GestioneTornei {
             }
             System.out.println("Importazione avvenuta con successo.");
         } catch (IOException e) {
-            System.out.println("Errore durante l'importazione dei dati: ");
+            System.out.println("Errore durante l'importazione dei dati: " + e.getMessage());
         }
     }
     
+    /**
+     * Restituisce la lista degli incontri.
+     * @return La lista degli incontri.
+     */
+    public List<String> getIncontri() {
+        return incontri;
+    }
+    
+    /**
+     * Restituisce la lista dei partecipanti al torneo.
+     * @return La lista dei partecipanti al torneo.
+     */
+    public List<Giocatore> getPartecipanti() {
+        return partecipanti;
+    }
+    
+    /**
+     * Restituisce una rappresentazione in formato stringa degli incontri tra i giocatori.
+     * @return Una stringa contenente gli incontri.
+     */
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
