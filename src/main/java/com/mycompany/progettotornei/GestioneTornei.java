@@ -100,7 +100,7 @@ public class GestioneTornei {
         for (int i = 0; i < giocatoriEffettivi.size(); i += 2) {
             Giocatore giocatore1 = giocatoriEffettivi.get(i);
             Giocatore giocatore2 = giocatoriEffettivi.get(i + 1);
-            String incontro = giocatore1.getNome() + " vs " + giocatore2.getNome();
+            String incontro = giocatore1.getNome() + giocatore1.getCognome() + " vs " + giocatore2.getNome()+ giocatore2.getCognome();
             incontri.add(incontro);
             System.out.println(incontro);
         }
@@ -135,8 +135,8 @@ public class GestioneTornei {
             }
 
             System.out.println("Partita giocata:");
-            System.out.println(giocatore1.getNome() + " vs " + giocatore2.getNome());
-            System.out.println("Esito: " + (esitoPartita == 0 ? "Pareggio" : esitoPartita == 1 ? giocatore1.getNome() + " vince" : giocatore2.getNome() + " vince"));
+            System.out.println(giocatore1.getNome() + " " + giocatore1.getCognome() + " vs "  + giocatore2.getNome() + " " + giocatore2.getCognome());
+            System.out.println("Esito: " + (esitoPartita == 0 ? "Pareggio" : esitoPartita == 1 ? giocatore1.getNome() + " " + giocatore1.getCognome() + " vince" : giocatore2.getNome() + " " + giocatore2.getCognome() + " vince"));
         }
     }
 
